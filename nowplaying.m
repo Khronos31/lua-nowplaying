@@ -1,9 +1,12 @@
 #include <lua.h>
 #include <lauxlib.h>
 #include <NowPlayingInfo.h>
+#import <Foundation/Foundation.h>
 
 static int app(lua_State *L) {
-  const char *app = nowPlayingApplication();
+  NowPlayingInfo *np = [NowPlayingInfo sharedInstance];
+  NSString *npApp = [np nowPlayingApplication][@"displayName"];
+  const char *app = npApp.UTF8String;
   if (app[0] != '\0') {
     lua_pushstring(L, app);
   } else {
@@ -13,7 +16,8 @@ static int app(lua_State *L) {
 }
 
 static int title(lua_State *L) {
-  const char *title = nowPlayingTitle();
+  NowPlayingInfo *np = [NowPlayingInfo sharedInstance];
+  const char *title = np.title.UTF8String;
   if (title[0] != '\0') {
     lua_pushstring(L, title);
   } else {
@@ -23,7 +27,8 @@ static int title(lua_State *L) {
 }
 
 static int artist(lua_State *L) {
-  const char *artist = nowPlayingArtist();
+  NowPlayingInfo *np = [NowPlayingInfo sharedInstance];
+  const char *artist = np.artist.UTF8String;
   if (artist[0] != '\0') {
     lua_pushstring(L, artist);
   } else {
@@ -33,7 +38,8 @@ static int artist(lua_State *L) {
 }
 
 static int album(lua_State *L) {
-  const char *album = nowPlayingAlbum();
+  NowPlayingInfo *np = [NowPlayingInfo sharedInstance];
+  const char *album = np.album.UTF8String;
   if (album[0] != '\0') {
     lua_pushstring(L, album);
   } else {
